@@ -24,6 +24,14 @@ public abstract class Tabela {
 	}
 
 
+	public int getLinhasPreenchidas() {
+		return linhasPreenchidas;
+	}
+
+	public void setLinhasPreenchidas(int linhasPreenchidas) {
+		this.linhasPreenchidas = linhasPreenchidas;
+	}
+
 	public int getInGrade(int linha, int coluna) {
 		return grade[linha][coluna];
 	}
@@ -32,7 +40,7 @@ public abstract class Tabela {
 		this.grade[linha][coluna] = valor;
 	}
 
-	public abstract void gerarTabela();
+	public abstract void gerarTabela(String tipo);
 	
 	
 }

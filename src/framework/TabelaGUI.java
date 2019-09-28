@@ -10,7 +10,7 @@ public class TabelaGUI extends Tabela {
 	}
 
 	@Override
-	public void gerarTabela() {
+	public void gerarTabela(String tipo) {
 		// TODO Auto-generated method stub
 		JFrame frame = new JFrame();
 		JOptionPane.showMessageDialog(frame, "Nao existe implementacao grafica para este sistema ainda");
