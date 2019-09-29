@@ -3,23 +3,89 @@ package enigma_binario;
 import framework.Principal;
 import framework.Tabela;
 import framework.TabelaConsole;
+import framework.TabelaFabrica;
 
-public class MotorBinario {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import framework.Conversores;
+
+public class MotorBinario extends framework.Motor {
 	
-	//Converte inteiro em um número binário
-	public static int toBinario(int numero) {
-		int d = numero;
-		StringBuffer binario = new StringBuffer(); // guarda os dados
-		while (d > 0) {
-			int b = d % 2;
-			binario.append(b);
-			d = d >> 1; // é a divisão que você deseja
+	private String palavra = null;
+	
+	public MotorBinario() {
+		super("binaria");
+	}
+	
+	public MotorBinario(int linhas, int colunas, int qtdNiveis) {
+		super(linhas, colunas, qtdNiveis, "binaria");
+	}
+	
+	@Override
+	public void rotina(int nivel) {
+		
+		String p = null;
+		
+		switch(nivel) {
+			case  1:
+				setPalavra("ROBO");
+				break;
+			case 2:
+				setPalavra("JOVEM");
+				break;
 		}
-		return Integer.parseInt(binario.reverse().toString()); // inverte a ordem e retorna
+		
+		System.out.println("Transforme cada linha em um valor decimal e descubra qual a palavra com base na legenda abaixo:");
+		
+		tab.setLinhasPreenchidas(0);
+		inserirNaGrade(tab, palavra);
+		tab.gerarTabela(TIPO_JOGO);
+		
+	
+		int totalLetras = 26;
+		
+		System.out.println("\nLegenda:");
+		for (int i = 1; i <= totalLetras; i++) {
+			if (i<10)
+				System.out.print("0");
+			System.out.print(i + " ");
+		}
+		System.out.println();
+		for (int i = 65; i < 65+totalLetras; i++) {
+			char c = (char) i;
+			System.out.print(" " + c + " ");
+		}
+		System.out.println();
+		
+		System.out.println("\nDigite a palavra que corresponde ao enigma:");
+		
+		p = new Scanner(System.in).next();
+		p = p.toUpperCase();
+		
+		System.out.println("\nPalavra: "+ getPalavra());
+		if (p.equals(getPalavra())) {
+			System.out.println("Parabens! Palavra Correta!");
+			setTrofeus(nivel-1, 1);
+		}
+		//else if (p.equals("L"+)) Aplicar expressão regular
+		else
+			System.out.println("Voce Errou!");
+		
+		try {
+			char c = (char) System.in.read();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	//Método que insere uma palavra em binário na grade da tabela
-	public static void inserirPalavra(Tabela tab, String palavra) {
+	@Override
+	public void inserirNaGrade(Tabela tab, String palavra) {
 		
 		int bits; //armazena temporariamente um caractere da palavra em binário
 		
@@ -27,7 +93,7 @@ public class MotorBinario {
 		
 		for (int i = 0; i < palavra.length(); i++) {
 			int saltos = 0; //Pula um conjunto de colunas para escrever o binário na posição certa da tabela
-			bits = toBinario(Integer.getInteger(palavra, palavra.charAt(i)-64)); 
+			bits = Conversores.toBinario(Integer.getInteger(palavra, palavra.charAt(i)-64)); 
 			
 			//Este trecho serve para formatar a grade, acrescentando zeros à esquerda do número binário
 			for (int j = 0; j < tab.getNUM_COLUNAS() - Integer.toString(bits).length(); j++) {
@@ -48,12 +114,21 @@ public class MotorBinario {
 	public static void imprimirBinario(String palavra) {
 		palavra = palavra.toUpperCase(); //Deixa as letras maiusculas
 		
-		int bits = toBinario(Integer.getInteger(palavra, palavra.charAt(0)-64));
+		int bits = Conversores.toBinario(Integer.getInteger(palavra, palavra.charAt(0)-64));
 		
 		for (int i = 0; i < palavra.length(); i++) { //imprime binario da palavra
-			bits = toBinario(Integer.getInteger(palavra, palavra.charAt(i)-64));
+			bits = Conversores.toBinario(Integer.getInteger(palavra, palavra.charAt(i)-64));
 			System.out.print(palavra.charAt(i));
 			System.out.println(" " + String.format("%05d", bits));
 		}
 	}
+
+	public String getPalavra() {
+		return palavra;
+	}
+
+	public void setPalavra(String palavra) {
+		this.palavra = palavra;
+	}
+	
 }
